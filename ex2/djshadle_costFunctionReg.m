@@ -22,20 +22,26 @@ grad = zeros(size(theta));
     hypo = sigmoid(X * theta);
     
     % Computing cost function
-    J_part1 = (1 / (2 * m)) * (-y' * log(hypo) - (1 - y') * log(1 - hypo));
-    J_part2 = (lambda/(2*m)) * sum(theta(2:len).^2);
+    %J_part1 is computing the first portion like first cost function
+    J_part1 = (1 / m) * (-y' * log(hypo) - (1 - y') * log(1 - hypo));
+    %J_part2 is computing the regularization portion
+    J_part2 = (lambda / m) * sum(theta(2:len).^2);
     
+    %Add both parts together to return whole cost function
     J = J_part1 + J_part2;
     
     % Computing gradient
-    grad = (1 / m) * X' * (hypo - y);
-    temp = theta;
-    temp(1) = 0;
+    %grad_part1 is computing the first portion like first gradient function
+    grad_part1 = (1 / m) * X' * (hypo - y);
+    %J_part2 is computing the regularization portion, leaving off theta 0
+    grad_part2 = (lambda / m) .* theta(2:len);
     
-    disp(temp);
-    disp(grad);
+    %Need to add extra column for theta 0
+    grad_part2 = [0; grad_part2];
     
-    grad = grad + (lambda / m .* temp)';
+    
+    %Add both parts together to return whole gradient
+    grad = grad_part1 + grad_part2;
 
 
 % =============================================================
