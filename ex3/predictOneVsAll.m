@@ -29,10 +29,15 @@ X = [ones(m, 1) X];
 %       are in rows, then, you can use max(A, [], 2) to obtain the max 
 %       for each row.
 %       
-
-
-
-
+    
+    % Computing prediction with our previous predict function
+    predict = sigmoid (X * all_theta');
+    
+    % Finding max element in the rows
+    [predict_max, index_max] = max(predict, [], 2);
+    
+    % Setting p to vector
+    p = index_max;
 
 
 
