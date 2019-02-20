@@ -62,23 +62,49 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+    % ****************** Part 1: Implement cost function ******************
+    
+    % Creating a Y matrix that works with the hypothesis matrix
+    I = eye(num_labels);
+    Y = zeros(m, num_labels);
+    for i=1:m
+       Y(i, :)= I(y(i), :);
+    end
+    
+    % Computing activation for each layer of the neural net
+    a1 = [ones(m, 1) X];
+    z2 = a1 * Theta1';
+    a2 = sigmoid(z2);
+    a2 = [ones(size(z2, 1), 1) a2];
+    z3 = a2 * Theta2';
+    a3 = sigmoid(z3);
+    hypo = a3;
+    
+    % Computing J without regularization
+    J_part1 = (-1/m) * sum(sum((Y) .* log(hypo) + (1 - Y) .* log(1 - hypo), 2));
+    
+    % **************** Part 2: Implement backpropogation ******************
+    
+    diff3 = a3 - Y;
+    diff2 = (diff3 * Theta2 .* sigmoidGradient([ones(size(z2, 1), 1) z2]));
+    diff2 = diff2(:, 2:end);
+    
+    delta1 = diff2' * a1;
+    delta2 = diff3' * a2;
+    
+    % ** Part 3: Implement regularization of cost function and gradients **
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    % Computing J with regularization
+    J_part2 = (lambda /(2 * m)) * (sum(sum(Theta1(:,2:end) .^ 2, 2)) + ...
+        sum(sum(Theta2(:,2:end) .^ 2, 2)));
+    
+    J = J_part1 + J_part2;
+    
+    % Computing gradients with regulatization
+    Theta1_grad = ((1 / m) * delta1) + (lambda / m) * ...
+        [zeros(size(Theta1,1), 1) Theta1(:, 2:end)];
+    Theta2_grad = ((1 / m) * delta2) + (lambda / m) * ...
+        [zeros(size(Theta2,1), 1) Theta2(:, 2:end)];
 
 % -------------------------------------------------------------
 
