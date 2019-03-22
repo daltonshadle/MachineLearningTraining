@@ -24,14 +24,18 @@ centroids = zeros(K, n);
 %               centroid i.
 %
 % Note: You can use a for-loop over the centroids to compute this.
-%
-
-
-
-
-
-
-
+% computeCentroids(X, idx, K)
+    for i = 1:K
+        sum_indices = zeros(1,n);
+        ck = 0;
+        for j = 1:length(idx)
+            if idx(j) == i
+                sum_indices = sum_indices + X(j,:);
+                ck = ck + 1;
+            end
+        end
+        centroids(i,:) = sum_indices/ck;
+    end
 
 % =============================================================
 

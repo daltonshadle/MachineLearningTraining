@@ -20,12 +20,20 @@ idx = zeros(size(X,1), 1);
 %
 % Note: You can use a for-loop over the examples to compute this.
 %
-
-
-
-
-
-
+    for i = 1:size(X,1)
+        current_closest = 0;
+        current_close_dist = 9999999;
+        for j = 1:K
+            dist_vec = X(i,:) - centroids(j,:);
+            norm_squared = norm(dist_vec) ^2;
+            
+            if norm_squared < current_close_dist
+               current_closest = j;
+               current_close_dist = norm_squared;
+            end
+        end
+        idx(i, 1) = current_closest;
+    end
 
 % =============================================================
 
